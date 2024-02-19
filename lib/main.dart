@@ -17,16 +17,15 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Twitter Clone',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.theme,
       home: ref.watch(currentUserAccountProvider).when(
           data: (user) {
             if (user != null) {
               return const HomeView();
-            } else {
-              return const SignUpView();
             }
+            return const SignUpView();
           },
           error: (error, stackTract) => ErrorPage(error: error.toString()),
           loading: () => const LoadingPage()),

@@ -57,9 +57,9 @@ class AuthController extends StateNotifier<bool> {
           following: const [],
           profilePic: "",
           bannerPic: "",
-          uid: "",
           bio: "",
-          isTwitterBlue: false);
+          isTwitterBlue: false,
+          uid: right.$id);
       final response2 = await _userAPI.saveUserData(userModel);
       response2.fold((left) => showSnackBar(context, left.message), (right) {
         showSnackBar(context, "Account Created! Please Login.");
