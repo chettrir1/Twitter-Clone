@@ -29,7 +29,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
     passwordController.dispose();
   }
 
-  void signUp() {
+  void onSignUp() {
     ref.read(authControllerProvider.notifier).signUp(
           email: emailController.text,
           password: passwordController.text,
@@ -64,7 +64,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                     Align(
                         alignment: Alignment.topRight,
                         child:
-                            RoundedSmallButton(onTap: signUp, label: "Done")),
+                            RoundedSmallButton(onTap: onSignUp, label: "Done")),
                     const SizedBox(height: 40),
                     RichText(
                         text: TextSpan(

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:twitter_clone/apis/auth_api.dart';
@@ -32,5 +33,17 @@ class AuthController extends StateNotifier<bool> {
     state = false;
     response.fold(
         (left) => showSnackBar(context, left.message), (right) => right.email);
+  }
+
+  Future<void> login({
+    required String email,
+    required String password,
+    required BuildContext context,
+  }) async {
+    state = true;
+    final response = await _authAPI.login(email: email, password: password);
+    state = false;
+    response.fold(
+        (left) => showSnackBar(context, left.message), (right) => right.userId);
   }
 }
