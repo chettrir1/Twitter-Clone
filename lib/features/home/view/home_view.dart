@@ -27,6 +27,18 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar,
+      body: IndexedStack(
+        index: _page,
+        children: UiConstants.bottomTabBarPages,
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(
+          Icons.add,
+          color: Pallete.whiteColor,
+          size: 28,
+        ),
+      ),
       bottomNavigationBar: CupertinoTabBar(
         currentIndex: _page,
         onTap: onPageChange,
@@ -41,14 +53,18 @@ class _HomeViewState extends State<HomeView> {
           BottomNavigationBarItem(
               icon: SvgPicture.asset(AssetsConstants.searchIcon,
                   colorFilter: const ColorFilter.mode(
-                      Pallete.whiteColor, BlendMode.srcIn))),
+                    Pallete.whiteColor,
+                    BlendMode.srcIn,
+                  ))),
           BottomNavigationBarItem(
               icon: SvgPicture.asset(
                   (_page == 2)
                       ? AssetsConstants.notifFilledIcon
                       : AssetsConstants.notifOutlinedIcon,
                   colorFilter: const ColorFilter.mode(
-                      Pallete.whiteColor, BlendMode.srcIn)))
+                    Pallete.whiteColor,
+                    BlendMode.srcIn,
+                  )))
         ],
       ),
     );
