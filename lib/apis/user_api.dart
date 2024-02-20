@@ -1,5 +1,5 @@
 import 'package:appwrite/appwrite.dart';
-import 'package:appwrite/models.dart';
+import 'package:appwrite/models.dart' as model;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:twitter_clone/constants/constants.dart';
@@ -15,11 +15,11 @@ final userApiProvider = Provider((ref) {
 abstract class IUserApi {
   FutureEitherVoid saveUserData(UserModel userModel);
 
-  Future<Document> getUserData(String uid);
+  Future<model.Document> getUserData(String uid);
 }
 
 class UserAPI implements IUserApi {
-  Databases _db;
+  final Databases _db;
 
   UserAPI({required Databases db}) : _db = db;
 
@@ -47,7 +47,7 @@ class UserAPI implements IUserApi {
   }
 
   @override
-  Future<Document> getUserData(String uid) {
+  Future<model.Document> getUserData(String uid) {
     return _db.getDocument(
         databaseId: AppwriteConstants.databaseId,
         collectionId: AppwriteConstants.usersCollection,

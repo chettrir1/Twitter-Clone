@@ -31,7 +31,6 @@ final currentUserAccountProvider = FutureProvider((ref) {
 
 final currentUserDetailsProvider = FutureProvider((ref) {
   final currentUserId = ref.watch(currentUserAccountProvider).value!.$id;
-  print("USER_ID: ${currentUserId}");
   final userDetails = ref.watch(userDetailsProvider(currentUserId));
   return userDetails.value;
 });

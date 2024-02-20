@@ -8,7 +8,8 @@ import 'package:twitter_clone/common/common.dart';
 import 'package:twitter_clone/constants/constants.dart';
 import 'package:twitter_clone/core/utils.dart';
 import 'package:twitter_clone/features/auth/controller/auth_controller.dart';
-import 'package:twitter_clone/theme/pallete.dart';
+import 'package:twitter_clone/features/tweet/controller/tweet_controller.dart';
+import 'package:twitter_clone/theme/theme.dart';
 
 class CreateTweetView extends ConsumerStatefulWidget {
   static route() =>
@@ -35,9 +36,16 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetView> {
     setState(() {});
   }
 
+  void shareTweet() {
+    ref.read(tweetControllerProvider.notifier).shareTweet(
+        images: images, text: tweetTextController.text, context: context);
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentUser = ref.watch(currentUserDetailsProvider).value;
+    final isLoading = ref.watch(tweetControllerProvider);
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -48,63 +56,62 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetView> {
         ),
         actions: [
           RoundedSmallButton(
-            onTap: () {},
+            onTap: shareTweet,
             label: "Tweet",
             backgroundColor: Pallete.blueColor,
             textColor: Pallete.whiteColor,
           )
         ],
       ),
-      // body: currentUser == null
-      //     ? const Loader()
-      //     :
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const CircleAvatar(
-                    backgroundImage: NetworkImage(
-                        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2970&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"),
-                    radius: 30,
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: TextField(
-                      controller: tweetTextController,
-                      style: const TextStyle(fontSize: 22),
-                      decoration: const InputDecoration(
-                          hintText: "What's happening?",
-                          hintStyle: TextStyle(
-                              color: Pallete.greyColor,
-                              fontSize: 22,
-                              fontWeight: FontWeight.w600),
-                          border: InputBorder.none),
-                      maxLines: null,
+      body: (isLoading || currentUser == null)
+          ? const Loader()
+          : SafeArea(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CircleAvatar(
+                          backgroundImage: NetworkImage(currentUser.profilePic),
+                          radius: 30,
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: TextField(
+                            controller: tweetTextController,
+                            style: const TextStyle(fontSize: 22),
+                            decoration: const InputDecoration(
+                                hintText: "What's happening?",
+                                hintStyle: TextStyle(
+                                    color: Pallete.greyColor,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w600),
+                                border: InputBorder.none),
+                            maxLines: null,
+                          ),
+                        )
+                      ],
                     ),
-                  )
-                ],
+                    if (images.isNotEmpty)
+                      CarouselSlider(
+                          items: images.map(
+                            (file) {
+                              return Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  margin:
+                                      const EdgeInsets.symmetric(horizontal: 5),
+                                  child: Image.file(file));
+                            },
+                          ).toList(),
+                          options: CarouselOptions(
+                            height: 400,
+                            enableInfiniteScroll: false,
+                          ))
+                  ],
+                ),
               ),
-              if (images.isNotEmpty)
-                CarouselSlider(
-                    items: images.map(
-                      (file) {
-                        return Container(
-                            width: MediaQuery.of(context).size.width,
-                            margin: const EdgeInsets.symmetric(horizontal: 5),
-                            child: Image.file(file));
-                      },
-                    ).toList(),
-                    options: CarouselOptions(
-                      height: 400,
-                      enableInfiniteScroll: false,
-                    ))
-            ],
-          ),
-        ),
-      ),
+            ),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
           border: Border(
